@@ -1,59 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body {
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-    }
-
-    .code-container {
-      background: white;
-      padding: 20px 40px;
-      border-radius: 8px;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .code {
-      font-size: 32px;
-      font-family: monospace;
-      letter-spacing: 4px;
-      margin: 10px 0;
-      font-weight: bold;
-      color: #333;
-    }
-
-    h2 {
-      margin: 0;
-      color: #666;
-      font-size: 18px;
-    }
-  </style>
+  <meta http-equiv="Cache-Control" content="no-store" />
 </head>
-<body>
-  <div class="code-container">
-    <h2>Code</h2>
-    <div class="code" id="codeDisplay"></div>
-  </div>
-
+<body style="margin:0; display:flex; justify-content:center; align-items:center; height:100vh; font-family:monospace; font-size:40px;">
+  <div id="code"></div>
   <script>
-    function generateCode() {
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    // Check last generation time
+    const lastGen = localStorage.getItem('lastGenTime');
+    const now = Date.now();
+    
+    if (!lastGen || (now - lastGen) > 2000) { // 2 second cooldown
       let code = '';
-      for (let i = 0; i < 5; i++) {
-        code += characters.charAt(Math.floor(Math.random() * characters.length));
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      for(let i = 0; i < 5; i++) {
+        code += chars[Math.floor(Math.random() * chars.length)];
       }
-      return code;
-    }
-
-    // Generate and display code immediately when page loads
-    window.onload = function() {
-      document.getElementById('codeDisplay').textContent = generateCode();
+      document.getElementById('code').textContent = code;
+      localStorage.setItem('lastGenTime', now);
+    } else {
+      // Use the last generated code
+      const lastCode = localStorage.getItem('lastCode') || 'AWAIT';
+      document.getElementById('code').textContent = lastCode;
     }
   </script>
 </body>
